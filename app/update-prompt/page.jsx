@@ -1,23 +1,29 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 import Form from '@components/Form';
 
 const EditPrompt = () => {
     const router = useRouter();
 
-    const searchParams = () => useSearchParams();
-    // const searchParams = useSearchParams();
-    const promptId = searchParams().get("id");
-
-
     const [submitting, setSubmitting] = useState(false);
     const [post, setPost] = useState({
         prompt: '',
         tag: '',
     });
+
+    // State to hold the prompt ID
+    const [promptId, setPromptId] = useState(null);
+
+    useEffect(() => {
+      // Check if router is ready
+      if (router.isReady) {
+        const id = new URLSearchParams(window.location.search).get('id'); // Use this to extract 'id' from URL
+        setPromptId(id); // Set the prompt ID in state
+      }
+    }, [router.isReady]);
 
     useEffect(() => {
         const getPromptDetails = async () => {
